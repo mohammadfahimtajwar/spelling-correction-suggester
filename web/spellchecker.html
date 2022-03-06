@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+   <head>
+       <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+        * {
+            box-sizing: border-box;
+        }
+        .column {
+            float: left;
+            width: 50%;
+            padding: 10px;
+            height: 1380px;
+        }
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        </style>
+
+       <title>Spelling Correction Suggester</title>
+
+       <link rel="shortcut icon" href="images/favicon.ico">
+
+        <script>
+            function myFunction() {
+            var x = document.getElementById("told_you_so");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            }
+            else {
+                x.style.display = "none";
+            }
+        }
+        </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+        <script src="checkctl.js"></script>
+
+    </head>
+
+    <body>
+        <div ng-app="myApp" ng-controller="myCtrl" class="row">
+            <div class="column" style="background-color:#aaa;">
+                <img src="images/badge.jpg" width="40%">
+                <h1>Spelling Correction Suggester</h1>
+                <h2>(by Mohammad Fahim Tajwar)</h2>
+                This is a simple web application that receives an English word from the user and proceeds to remove all spaces from it and convert it to lowercase, before referencing it with a csv dictionary embedded into the backend, and accessed over a GitHub url. The application then notifies the user if the entered word is correctly spelled. If the word is incorrectly spelled (not in the dictionary), the application produces: a list of words with the input word's letters transposed at every possible position, a list of words that contains every possible insertion of every letter in the alphabet in all possible positions in the word, a list of words with each letter removed, a list of words with each letter in the input word replaced by every letter in the alphabet, and a list containing pairs of words with a space inserted at every position in the input word. It then cross-references these lists with the embedded dictionary to produce a list of suggested corrections (effectively serving as an autocorrect feature), which is then provided to the user. The user can then select any word from the suggested corrections, if any, or type in a new word as a correction. The application logic was implemented on Python and the interface design was effectuated using Flask, JavaScript and HTML, with the backend deployed on Heroku.
+                <p>
+                </p>
+            </div>
+            <div class="column" style="background-color:#bbb;">
+                <h1>Spell any word.</h1>
+                <h2 style="color: red;">Let's go!</h2>
+                <br>
+                Please enter the word here: <input style="width: 180px;" type="text" ng-model="input_word" name="word"><br>
+                <button ng-show="haveInput()" ng-click="check()">Check Spelling</button>
+                <br><br><br>
+                <div ng-show="word_correct">
+                    The word is correctly spelled!
+                    <button ng-click="reset_submission()">Reset</button>
+                </div>
+                <div ng-show="haveAnswers&&!show_correction_rsp()">
+                    {{ correct_prompt }}
+                    <br>
+                    <div ng-show="!show_correction_rsp()">
+                        <ul>
+                            <li ng-repeat="w in corrected_words" ng-click="chose_word(w)">{{w}}</li>
+                        </ul>
+                        Enter your own correction: <input style="width: 180px;" type="text" ng-model="correct_word" name="word"><br>
+                        <button ng-click="submit_correction()">Reset</button>
+                        <br><br>
+                    </div>
+                </div>
+                <div ng-show="show_correction_rsp()&&(!haveInput())">
+                    {{correction_response}}
+                </div>
+
+                <p></p>
+                <a href='https://github.com/mohammadfahimtajwar/spelling-correction-suggester'><button>GitHub Repository</button></a>
+                <a href='https://www.mohammadfahimtajwar.com'><button>Click here to learn more about me!</button></a>
+            </div>
+        </div>
+   </body>
+</html>
